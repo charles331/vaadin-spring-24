@@ -98,6 +98,17 @@
 
 
 
+        <!-- https://mvnrepository.com/artifact/com.github.appreciated/apexcharts -->
+        <dependency>
+            <groupId>com.github.appreciated</groupId>
+            <artifactId>apexcharts</artifactId>
+            <version>24.0.0</version>
+        </dependency>
+
+
+
+
+
     </dependencies>
 
     <build>
