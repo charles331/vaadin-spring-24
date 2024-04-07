@@ -2,21 +2,17 @@ package org.vaadin.example.view;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
-import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
+import org.vaadin.example.broadcaster.Broadcaster;
 import org.vaadin.example.entity.Vote;
-import org.vaadin.example.event.VoteAddedEvent;
 import org.vaadin.example.service.VoteService;
 
 @Route("feedback")
@@ -35,9 +31,6 @@ public class FeedbackView extends VerticalLayout {
 
     //private NumberField ratingField = new NumberField("Rating (1-5)");
     private RadioButtonGroup<Integer> ratingField = new RadioButtonGroup<>();
-
-    @Autowired
-    private ApplicationEventPublisher eventPublisher;
 
     @Autowired
     public FeedbackView(VoteService voteService) {
@@ -92,53 +85,7 @@ public class FeedbackView extends VerticalLayout {
         } catch (Exception e) {
             Notification.show("Failed to save vote: " + e.getMessage(), 5000, Notification.Position.MIDDLE);
         }
-        // Publish the event
-        eventPublisher.publishEvent(new VoteAddedEvent(vote));
+        Broadcaster.broadcast("Nouveau vote");
     }
 
-
-//    public FeedbackView() {
-//        // Titre de la page
-//        H1 heading = new H1("Feedback sur la vidéo de la semaine");
-//
-//        // Intégration vidéo - Utiliser un composant approprié ou un iframe
-//        // Remplacer `urlVideo` par l'URL de votre vidéo
-//        String urlVideo = "https://example.com/video";
-//        Anchor videoLink = new Anchor(urlVideo, "Voir la vidéo de la semaine");
-//        videoLink.setTarget("_blank");
-//
-//        // Avis
-//        TextArea feedbackField = new TextArea("Votre avis");
-//        feedbackField.setPlaceholder("Écrivez ici...");
-//
-//        // Suggestions d'amélioration
-//        TextArea improvementField = new TextArea("Suggestions d'amélioration");
-//        improvementField.setPlaceholder("Écrivez ici...");
-//
-//        // Notation
-//        RadioButtonGroup<String> rating = new RadioButtonGroup<>();
-//        rating.setLabel("Notez la vidéo");
-//        rating.setItems("1", "2", "3", "4", "5");
-//
-//        // Bouton de soumission
-//        Button submitButton = new Button("Soumettre", event -> {
-//            // Traitement à l'envoi
-//            // Sauvegarder les feedbacks et la note, afficher une notification, etc.
-//        });
-//
-//        // Ajouter tous les composants au layout
-//        add(heading, videoLink, feedbackField, improvementField, rating, submitButton);
-//    }
-
-//    private void saveVote() {
-//        Vote vote = new Vote();
-//        vote.setVoterName(voterNameField.getValue());
-//        vote.setRating(ratingField.getValue().intValue());
-//        vote.setComment(commentField.getValue());
-//        vote.setSuggestion(suggestionField.getValue());
-//
-//        voteService.saveVote(vote);
-//        Notification.show("Vote saved successfully!");
-//        // Optionally, clear the form fields or take other actions
-//    }
 }

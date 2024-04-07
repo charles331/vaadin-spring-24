@@ -6,10 +6,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
+import org.vaadin.example.broadcaster.Broadcaster;
 import org.vaadin.example.entity.Vote;
-import org.vaadin.example.event.VoteAddedEvent;
 import org.vaadin.example.service.VoteService;
 
 @Route(value = "results")
@@ -20,20 +18,21 @@ public class ResultsView extends VerticalLayout {
     private final Grid<Vote> grid = new Grid<>(Vote.class);
 
     @Autowired
-    public ResultsView(VoteService voteService, ApplicationEventPublisher eventPublisher) {
+    public ResultsView(VoteService voteService) {
         this.voteService = voteService;
         setSizeFull(); // Ensure the layout takes the full size
         configureGrid();
         add(grid);
         updateList();
-    }
-
-    @EventListener
-    public void onVoteAdded(VoteAddedEvent event) {
-        UI.getCurrent().access(() -> {
-            updateList();
+        Broadcaster.register(message -> {
+            getUI().ifPresent(ui -> ui.access(() -> {
+                // Mettre à jour votre vue avec les nouvelles données ici
+                System.out.println("Broadcaster actionned !");
+                updateList();
+            }));
         });
     }
+
 
     private void configureGrid() {
         grid.setSizeFull();

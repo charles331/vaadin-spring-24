@@ -1,11 +1,9 @@
-package org.vaadin.example.view;
+package org.vaadin.example.appshell;
 
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.shared.communication.PushMode;
 import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.lumo.Lumo;
 
 @Push
 @Theme("my-theme")
